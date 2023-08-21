@@ -1,3 +1,36 @@
+function cargarProductos() {
+    fetch('data.json')
+        .then(response => response.json())
+        .then(data => {
+
+            console.log(data);
+
+            const agregarBotones = document.getElementsByClassName('agregar');
+            for (const boton of agregarBotones) {
+                boton.remove();
+            }
+
+            for (const producto of data) {
+                const boton = document.createElement('button');
+                boton.textContent = `Agregar ${producto.nombre}`;
+                boton.dataset.producto = producto.nombre;
+                boton.dataset.precio = producto.precio;
+                boton.className = 'agregar';
+
+                boton.addEventListener('click', () => {
+                    agregarProductoAlCarrito(producto.nombre, producto.precio);
+                });
+
+                document.body.appendChild(boton);
+            }
+        })
+        .catch(error => {
+            console.error('Error al cargar los productos:', error);
+        });
+}
+
+document.addEventListener('DOMContentLoaded', cargarProductos);
+
 /* agregar un producto al carrito */
 function agregarProductoAlCarrito(nombreProducto, precioProducto) {
     const carrito = document.getElementById('carrito');
@@ -46,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const verCarrito = document.getElementById('verCarrito');
     const comprarBtn = document.getElementById('comprar');
     const vaciarCarritoBtn = document.getElementById('vaciarCarrito');
-    
+
     /* agregar un producto al carrito */
     for (const boton of agregarBotones) {
         boton.addEventListener('click', () => {
@@ -56,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    
+
     /* mostrar la ventana modal del carrito */
     verCarrito.addEventListener('click', () => {
         modal.style.display = 'block';
